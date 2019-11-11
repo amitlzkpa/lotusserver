@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 const Eq = require('./models/Equalizer.js');
@@ -9,6 +10,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 let mongoURI = `mongodb://${process.env.MONGO_ID}:${process.env.MONGO_PWD}@ds229609.mlab.com:29609/lotusserver`;
 mongoose.connect(mongoURI);
