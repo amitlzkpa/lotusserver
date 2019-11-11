@@ -15,7 +15,9 @@ app.use(cors());
 let mongoURI = `mongodb://${process.env.MONGO_ID}:${process.env.MONGO_PWD}@ds229609.mlab.com:29609/lotusserver`;
 mongoose.connect(mongoURI);
 
-// app.use(express.static('public'));
+
+
+app.use(express.static('public'));
 // app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
 
