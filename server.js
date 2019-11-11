@@ -2,12 +2,20 @@ require('dotenv').config(); // read .env files
 const express = require('express');
 const EqModel = require('./models/Equalizer.js');
 const bodyparser = require('bodyparser');
+const mongoose = require('mongoose');
+const Eq = require('./models/Equalizer.js');
+
 
 const app = express();
 const port = process.env.PORT || 4000;
 
 // Use middlewares
 app.use(bodyparser());
+
+
+// Connect mongo
+let mongoURI = `mongodb://${process.env.MONGO_ID}:${process.env.MONGO_PWD}@ds127115.mlab.com:29609/lotusserver`;
+mongoose.connect(mongoURI);
 
 // Set public folder as root
 app.use(express.static('public'));
