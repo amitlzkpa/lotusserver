@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const schedule = require('node-schedule');
 
 const Eq = require('./models/Equalizer.js');
 
@@ -19,6 +21,23 @@ mongoose.connect(mongoURI);
 
 app.use(express.static('public'));
 // app.use('/scripts', express.static(`${__dirname}/node_modules/`));
+
+
+let j = schedule.scheduleJob('*/15 * * * *', function(fireDate){
+	console.log('-------------------');
+	console.log(`Starting task at: ${fireDate}`);
+	let allSubmitted = await Eq.find({});
+	for (let idx=0; idx<allSubmitted.length; idx++) {
+		let eq = allSubmitted[idx];
+		let tx_details = await arweave.transactions.get(eq.tx)
+		console.log(tx_details);
+	}
+
+	console.log(`Completed task at: ${Date.now}`);
+	console.log('-------------------');
+
+});
+
 
 
 

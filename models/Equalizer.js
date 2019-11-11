@@ -9,6 +9,7 @@ let EqSchema = new mongoose.Schema(
     address: String,
     tx: String,
     giturl: String,
+    url_id: { type: String, default: '' },
     created: { type: Date, default: Date.now },
   },
   {
