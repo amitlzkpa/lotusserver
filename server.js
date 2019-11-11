@@ -35,7 +35,7 @@ app.post('/api/add', async function(req, res) {
 
 
 
-app.post('/api/get-all', async function(req, res) {
+app.get('/api/get-all', async function(req, res) {
 
 	try {
 
