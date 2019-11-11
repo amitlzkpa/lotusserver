@@ -20,16 +20,17 @@ app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 app.get('/', (req, res) => res.sendFile(`${__dirname}/public/index.html`));
 
 app.post('/api/add', async function(req, res) {
-	console.log(req.body);
 
-	let newEq = new Eq(req.body);
+	try {
 
-	// console.log(newEq);
+		let newEq = new Eq(req.body);
+		let savedEq = await newEq.save();
+		res.json(savedEq);
 
-	let savedEq = await newEq.save();
-	console.log(savedEq);
-
-	res.send(savedEq);
+	} catch(ex) {
+		console.log(ex);
+		res.json(null);
+	}
 
 });
 
