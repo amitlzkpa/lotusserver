@@ -13,11 +13,10 @@ app.use(bodyParser.json());
 let mongoURI = `mongodb://${process.env.MONGO_ID}:${process.env.MONGO_PWD}@ds229609.mlab.com:29609/lotusserver`;
 mongoose.connect(mongoURI);
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
+// app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
-app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
-app.get('/', (req, res) => res.sendFile(`${__dirname}/public/index.html`));
 
 app.post('/api/add', async function(req, res) {
 
@@ -33,6 +32,26 @@ app.post('/api/add', async function(req, res) {
 	}
 
 });
+
+
+
+app.post('/api/get-all', async function(req, res) {
+
+	try {
+
+		let ret = await Eq.find({});
+		res.json(ret);
+
+	} catch(ex) {
+		console.log(ex);
+		res.json(null);
+	}
+
+});
+
+
+
+app.get('*', (req, res) => res.sendFile(`${__dirname}/public/index.html`));
 
 // Listen for HTTP requests on port 4000
 app.listen(port, () => {
