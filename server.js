@@ -1,11 +1,18 @@
 require('dotenv').config();
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const schedule = require('node-schedule');
+const Arweave = require('arweave/node');
+
 
 const Eq = require('./models/Equalizer.js');
+
+
+
+
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -18,17 +25,33 @@ mongoose.connect(mongoURI);
 
 
 
+
+
+let arweave = Arweave.init({
+    host: 'arweave.net',// Hostname or IP address for a Arweave host
+    port: 443,          // Port
+    protocol: 'https',  // Network protocol http or https
+    timeout: 20000,     // Network request timeouts in milliseconds
+    logging: false,     // Enable network request logging
+});
+
+
+let keyLoc = `./keys/default.json`;
+let jwk = JSON.parse(fs.readFileSync(keyLoc));
+
+
+
 app.use(express.static('public'));
 // app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
 
-let j = schedule.scheduleJob('*/15 * * * *', async function(fireDate){
+let j = schedule.scheduleJob('*/1 * * * *', async function(fireDate){
 	console.log('-------------------');
 	console.log(`Starting task at: ${fireDate}`);
 	let allSubmitted = await Eq.find({});
 	for (let idx=0; idx<allSubmitted.length; idx++) {
 		let eq = allSubmitted[idx];
-		let tx_details = await arweave.transactions.get(eq.tx)
+		let tx_details = await arweave.transactions.get(eq.tx, jwk)
 		console.log(tx_details);
 	}
 
