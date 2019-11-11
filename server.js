@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const mongoose = require('mongoose');
 const schedule = require('node-schedule');
 
 const Eq = require('./models/Equalizer.js');
@@ -23,7 +22,7 @@ app.use(express.static('public'));
 // app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
 
-let j = schedule.scheduleJob('*/15 * * * *', function(fireDate){
+let j = schedule.scheduleJob('*/15 * * * *', async function(fireDate){
 	console.log('-------------------');
 	console.log(`Starting task at: ${fireDate}`);
 	let allSubmitted = await Eq.find({});
