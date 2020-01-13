@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const schedule = require('node-schedule');
 const Arweave = require('arweave/node');
 
 
@@ -45,22 +44,6 @@ app.use(express.static('public'));
 // app.use('/scripts', express.static(`${__dirname}/node_modules/`));
 
 
-let j = schedule.scheduleJob('*/1 * * * *', async function(fireDate){
-	console.log('-------------------');
-	console.log(`Starting task at: ${fireDate}`);
-	let allSubmitted = await Eq.find({});
-	for (let idx=0; idx<allSubmitted.length; idx++) {
-		let eq = allSubmitted[idx];
-		let tx_details = await arweave.transactions.get(eq.tx, jwk)
-		console.log(tx_details);
-	}
-
-	console.log(`Completed task at: ${Date.now}`);
-	console.log('-------------------');
-
-});
-
-
 
 
 app.post('/api/add', async function(req, res) {
@@ -83,8 +66,22 @@ app.post('/api/add', async function(req, res) {
 app.get('/api/get-all', async function(req, res) {
 
 	try {
-
 		let ret = await Eq.find({});
+		res.json(ret);
+
+	} catch(ex) {
+		console.log(ex);
+		res.json(null);
+	}
+
+});
+
+
+
+app.get('/api/eqs/:id', async function(req, res) {
+
+	try {
+		let ret = await Eq.find({id: req.params.id});
 		res.json(ret);
 
 	} catch(ex) {
